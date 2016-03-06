@@ -1,0 +1,107 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<style src="https://code.jquery.com/ui/1.11.4/themes/south-street/jquery-ui.css"></style>
+
+	<style type="text/css">
+		div span.myBox{			
+		position: absolute;
+		top: 50%;
+		right:-25px;
+		width: 50px;
+     	height: 50px;
+    	background-color: lavender;
+    	border: solid 1px silver;
+    	transform: rotate(45deg);
+    }
+
+	div.myPanel{
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		height:100%;
+
+	}
+</style>
+<script type="text/javascript">
+$( init );
+ 
+ function aHelper(event)
+ {
+ 	return '<span></span>';
+ }
+
+function init() {
+  $('#box1').draggable({
+  	 start:handleDragStart,
+  	 drag:handleDrag,
+  	 helper:aHelper});
+
+  $('#box2').draggable({
+  	 start:handleDragStart2,
+  	 drag:handleDrag2,
+  	 helper:aHelper});
+
+  window.myB1Percentage=33;
+  window.myB2Percentage=66;
+  window.myB3Percentage=100;
+  window.myEventCache=null;
+
+}
+ 
+function handleDragStart( event, ui ) {
+  window.myEventCache=event;
+  window.myB1PercentageCache=window.myB1Percentage;
+  window.myB2PercentageCache=window.myB2Percentage;
+  window.myB3PercentageCache=window.myB3Percentage;
+}
+
+function handleDrag( event, ui ) {
+  //Affects only P1, P2
+  var myPA=event.clientX/($( window ).width()/100);
+  var myPB=window.myB2PercentageCache-myPA;
+  window.myB1Percentage=myPA;
+  window.myB2Percentage=myPA + myPB;
+
+  $("#panel1").css("width",myPA + "%");
+  $("#panel2").css("padding-left",myPA + "%");
+  $("#panel2").css("width", myPB + "%");
+}
+
+function handleDragStart2( event, ui ) {
+  window.myEventCache=event;
+  window.myB1PercentageCache=window.myB1Percentage;
+  window.myB2PercentageCache=window.myB2Percentage;
+  window.myB3PercentageCache=window.myB3Percentage;
+}
+
+function handleDrag2( event, ui ) {
+	//Affects only P2, P3
+  var myPB= event.clientX/($( window ).width()/100);
+  var myPC=100-myPB;
+
+  $("#panel2").css("width",myPB-window.myB1PercentageCache + "%");
+
+  window.myB2Percentage= myPB;
+}
+
+
+</script>
+ 
+
+</script>
+</head>
+<body>
+		<div id="panel3" class="myPanel" style="width: 33%; padding-left: 66%;  background-color: #006600; background-image:url(img/bmw_7-series.jpg);"></div>
+		<div id="panel2" class="myPanel" style="width: 33%; padding-left: 33.331%; background-color: #330066; background-image:url(img/santa-barbara-county.jpeg);">
+			<span id="box2" class="myBox" ></span>
+		</div>
+		<div id="panel1" class="myPanel" style="width: 33%; padding-left: 0%;  background-color: #CC6600; ;">
+			<span id="box1" class="myBox" ></span>
+		</div>
+</body>
+</html>
